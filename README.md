@@ -22,5 +22,5 @@ The user can create, update, delete and look up events.
 Once the repo is cloned run
 > ./mvnw spring-boot:run
 
-Check OpenAPI page at this url:
+Check OpenAPI page at this url once the project is running:
 > http://localhost:8080/swagger-ui/index.html#/
