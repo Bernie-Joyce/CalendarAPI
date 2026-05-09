@@ -42,24 +42,24 @@ public class EventController {
 
     @GetMapping("/event/{id}")
     public ResponseEntity<Event> getEventById(@PathVariable Integer id) {
-     Optional<Event> event = repository.findById(id);
-        return event.map(
-                value -> new ResponseEntity<>(value, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        Optional<Event> event = repository.findById(id);
+        return event.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
+
     @DeleteMapping("/event/{id}")
     public ResponseEntity<Event> deleteEventById(@PathVariable Integer id) {
         Optional<Event> event = repository.findById(id);
-        if (event.isPresent()){
+        if (event.isPresent()) {
             repository.deleteById(id);
-            return new ResponseEntity<>(event.get(),HttpStatus.OK);
+            return new ResponseEntity<>(event.get(), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
 
     @GetMapping("/event/{start}/{end}")
     public ResponseEntity<List<Event>> getEventsBetweenDates(@PathVariable LocalDate start, @PathVariable LocalDate end) {
         List<Event> events = repository.findAllByDateBetween(start, end);
-        if (events == null) {
+        if (events.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(events, HttpStatus.OK);
