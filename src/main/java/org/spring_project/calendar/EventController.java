@@ -47,4 +47,14 @@ public class EventController {
                 value -> new ResponseEntity<>(value, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
+    @DeleteMapping("/event/{id}")
+    public ResponseEntity<Event> deleteEventById(@PathVariable Integer id) {
+        Optional<Event> event = repository.findById(id);
+        if (event.isPresent()){
+            repository.deleteById(id);
+            return new ResponseEntity<>(event.get(),HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+}
 }
