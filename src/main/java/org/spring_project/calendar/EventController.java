@@ -15,5 +15,8 @@ public class EventController {
         return new ResponseEntity<>("[]", HttpStatus.OK);
     }
 
+    @PostMapping("/event")
+    public ResponseEntity<String> makeEvent(RequestEntity<Event> request){
 
+    }
 }
