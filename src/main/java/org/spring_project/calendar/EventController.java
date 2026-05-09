@@ -1,15 +1,12 @@
 package org.spring_project.calendar;
 
-import org.jspecify.annotations.Nullable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class EventController {
@@ -41,5 +38,13 @@ public class EventController {
     public ResponseEntity<Event> makeEvent(@RequestBody Event event) {
         Event saved = repository.save(event);
         return new ResponseEntity<>(saved, HttpStatus.OK);
+    }
+
+    @GetMapping("/event/{id}")
+    public ResponseEntity<Event> getEventById(@PathVariable Integer id) {
+     Optional<Event> event = repository.findById(id);
+        return event.map(
+                value -> new ResponseEntity<>(value, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 }
