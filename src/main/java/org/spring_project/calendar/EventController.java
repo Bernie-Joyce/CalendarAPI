@@ -1,8 +1,6 @@
 package org.spring_project.calendar;
 
-import org.jspecify.annotations.NonNull;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +18,8 @@ public class EventController {
     }
 
     @PostMapping("/event")
-    public ResponseEntity<String> makeEvent(@RequestBody String event, @RequestBody LocalDate date) {
-        return new ResponseEntity<>("The event has been added!", HttpStatus.OK);
+    public ResponseEntity<String> makeEvent(@RequestBody Event event) {
+        return new ResponseEntity<>("\"message\": \"The event has been added!\"\n\"event:\" \"" + event.event() + "\"\n\"date:\" \"" + event.date() + "\""
+                , HttpStatus.OK);
     }
 }
