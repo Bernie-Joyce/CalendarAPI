@@ -56,5 +56,12 @@ public class EventController {
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-}
+    @GetMapping("/event/{start}/{end}")
+    public ResponseEntity<List<Event>> getEventsBetweenDates(@PathVariable LocalDate start, @PathVariable LocalDate end) {
+        List<Event> events = repository.findAllByDateBetween(start, end);
+        if (events == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(events, HttpStatus.OK);
+    }
 }
