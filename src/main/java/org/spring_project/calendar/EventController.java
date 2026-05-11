@@ -20,7 +20,7 @@ public class EventController {
     /**
      * This controller has an event repository as a dependency so it can directly affect the database.
      *
-     * @param repository
+     *
      */
     public EventController(EventRepository repository) {
         this.repository = repository;
@@ -89,13 +89,11 @@ public class EventController {
     /**
      *
      * @param event will be created in the database
-     * @return The event the user created and a 200 status code
      */
     @Tag(name = "Create a new event")
     @PostMapping("/event")
-    public ResponseEntity<Event> makeEvent(@RequestBody Event event) {
-        Event saved = repository.save(event);
-        return new ResponseEntity<>(saved, HttpStatus.OK);
+    public void makeEvent(@RequestBody Event event) {
+        repository.save(event);
     }
 
     /**
@@ -116,7 +114,7 @@ public class EventController {
 
     /**
      *
-     * @param id The id of the event to be updated
+     * @param id    The id of the event to be updated
      * @param event The new event details in the request body
      * @return A not found code or the event that has been saved
      */
