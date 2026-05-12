@@ -41,4 +41,12 @@ class CalendarApplicationTests {
         ResponseEntity<Event> response = template.getForEntity(BASE_URL + savedEvent.getId(), Event.class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
+
+    @Test
+    void testing_Post(){
+        String BASE_URL = "http://localhost:" + port + "/event";
+        Event tempEvent = new Event("Test", LocalDate.parse("2026-05-12"));
+        ResponseEntity<Void> response = template.postForEntity(BASE_URL, tempEvent, Void.class);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
 }
