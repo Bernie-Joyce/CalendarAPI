@@ -14,6 +14,7 @@ import java.util.Optional;
  * the memory so each user that uses this API will store their own events.
  */
 @RestController
+@RequestMapping(value = "/event")
 public class EventController {
     EventRepository repository;
 
@@ -31,7 +32,7 @@ public class EventController {
      * @return Either a No content HttpStatus or A 200 status code with all events in the response body
      */
     @Tag(name = "Get all events")
-    @GetMapping("/event")
+    @GetMapping
     public ResponseEntity<List<Event>> getEvents() {
         List<Event> events = repository.findAll();
         if (events.isEmpty()) {
@@ -45,7 +46,7 @@ public class EventController {
      * @return Either a No content HttpStatus or a 200 status code with events that are set for today
      */
     @Tag(name = "Get today's events")
-    @GetMapping("/event/today")
+    @GetMapping("/today")
     public ResponseEntity<List<Event>> getTodayEvents() {
         List<Event> events = repository.findAllByDate(LocalDate.now());
         if (events.isEmpty()) {
@@ -60,7 +61,7 @@ public class EventController {
      * @return either a Not found HttpStatus or a 200 status code with the event in the request body
      */
     @Tag(name = "Get an event by Id")
-    @GetMapping("/event/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Event> getEventById(@PathVariable Integer id) {
         Optional<Event> event = repository.findById(id);
         return event.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
@@ -73,7 +74,7 @@ public class EventController {
      * @return Events between the range or a not found status
      */
     @Tag(name = "Get events between two dates")
-    @GetMapping("/event/{start}/{end}")
+    @GetMapping("/{start}/{end}")
     public ResponseEntity<List<Event>> getEventsBetweenDates(@PathVariable LocalDate start, @PathVariable LocalDate end) {
         List<Event> events = repository.findAllByDateBetween(start, end);
         if (start.isAfter(end)) {
@@ -91,7 +92,7 @@ public class EventController {
      * @param event will be created in the database
      */
     @Tag(name = "Create a new event")
-    @PostMapping("/event")
+    @PostMapping
     public void makeEvent(@RequestBody Event event) {
         repository.save(event);
     }
@@ -102,7 +103,7 @@ public class EventController {
      * @return The event that has been deleted and a 200 status code or a not found status code
      */
     @Tag(name = "Delete an event")
-    @DeleteMapping("/event/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Event> deleteEventById(@PathVariable Integer id) {
         Optional<Event> event = repository.findById(id);
         if (event.isPresent()) {
@@ -119,7 +120,7 @@ public class EventController {
      * @return A not found code or the event that has been saved
      */
     @Tag(name = "Update an event")
-    @PutMapping("/event/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Event> updateEvents(@PathVariable Integer id, @RequestBody Event event) {
         return repository.findById(id).map(e -> {
             e.setEvent(event.getEvent());

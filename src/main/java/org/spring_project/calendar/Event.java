@@ -19,8 +19,7 @@ public class Event {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private  @NonNull LocalDate date;
 
-    public Event(Integer id, @NonNull  String event, @JsonFormat(pattern = "yyyy-MM-dd") @NonNull LocalDate date) {
-        this.id = id;
+    public Event(@NonNull  String event, @JsonFormat(pattern = "yyyy-MM-dd") @NonNull LocalDate date) {
         this.event = event;
         this.date = date;
     }
