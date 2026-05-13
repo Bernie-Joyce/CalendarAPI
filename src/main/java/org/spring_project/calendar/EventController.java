@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * This controller allows the user to interact with in memory data. This means that all events are being stored in
@@ -33,12 +34,8 @@ public class EventController {
      */
     @Tag(name = "Get all events")
     @GetMapping
-    public ResponseEntity<List<Event>> getEvents() {
-        List<Event> events = repository.findAll();
-        if (events.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>(events, HttpStatus.OK);
+    public ResponseEntity<List<EventDTO>> getEvents() {
+        return new ResponseEntity<>(convertListToDTO(repository.findAll()), HttpStatus.OK);
     }
 
     /**
@@ -47,12 +44,8 @@ public class EventController {
      */
     @Tag(name = "Get today's events")
     @GetMapping("/today")
-    public ResponseEntity<List<Event>> getTodayEvents() {
-        List<Event> events = repository.findAllByDate(LocalDate.now());
-        if (events.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>(events, HttpStatus.OK);
+    public ResponseEntity<List<EventDTO>> getTodayEvents() {
+        return new ResponseEntity<>(convertListToDTO(repository.findAllByDate(LocalDate.now())), HttpStatus.OK);
     }
 
     /**
@@ -75,13 +68,13 @@ public class EventController {
      */
     @Tag(name = "Get events between two dates")
     @GetMapping("/{start}/{end}")
-    public ResponseEntity<List<Event>> getEventsBetweenDates(@PathVariable LocalDate start, @PathVariable LocalDate end) {
-        List<Event> events = repository.findAllByDateBetween(start, end);
+    public ResponseEntity<List<EventDTO>> getEventsBetweenDates(@PathVariable LocalDate start, @PathVariable LocalDate end) {
         if (start.isAfter(end)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+        List<EventDTO> events = convertListToDTO(repository.findAllByDateBetween(start, end));
         if (events.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(events, HttpStatus.OK);
     }
@@ -127,5 +120,22 @@ public class EventController {
             e.setDate(event.getDate());
             return new ResponseEntity<>(repository.save(e), HttpStatus.OK);
         }).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @GetMapping("/{name}")
+    public ResponseEntity<EventDTO> getEventByName(@PathVariable @RequestBody String name){
+        Optional<Event> optionalEvent = repository.findByEvent(name);
+        return optionalEvent.map(
+                event -> new ResponseEntity<>(convertToEventDTO(event), HttpStatus.OK))
+                .orElseGet(() ->
+                        new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    public EventDTO convertToEventDTO(Event event){
+        return new EventDTO(event.getEvent(),event.getDate());
+    }
+
+    public List<EventDTO> convertListToDTO(List<Event> events){
+        return repository.findAll().stream().map(this::convertToEventDTO).toList();
     }
 }
