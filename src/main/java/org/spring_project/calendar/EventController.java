@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
+
 
 /**
  * This controller allows the user to interact with in memory data. This means that all events are being stored in
@@ -136,6 +136,6 @@ public class EventController {
     }
 
     public List<EventDTO> convertListToDTO(List<Event> events){
-        return repository.findAll().stream().map(this::convertToEventDTO).toList();
+        return events.stream().map(this::convertToEventDTO).toList();
     }
 }
