@@ -1,4 +1,4 @@
-package org.spring_project.calendar;
+package org.spring_project.calendar.Event;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Entity;

@@ -1,4 +1,4 @@
-package org.spring_project.calendar;
+package org.spring_project.calendar.Event;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;

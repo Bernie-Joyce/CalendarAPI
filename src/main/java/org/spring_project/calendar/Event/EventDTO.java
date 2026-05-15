@@ -1,4 +1,4 @@
-package org.spring_project.calendar;
+package org.spring_project.calendar.Event;
 
 import java.time.LocalDate;
 

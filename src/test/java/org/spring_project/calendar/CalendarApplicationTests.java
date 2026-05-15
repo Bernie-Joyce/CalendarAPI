@@ -1,6 +1,8 @@
 package org.spring_project.calendar;
 
 import org.junit.jupiter.api.Test;
+import org.spring_project.calendar.Event.Event;
+import org.spring_project.calendar.Event.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
@@ -18,8 +20,8 @@ class CalendarApplicationTests {
 
     @LocalServerPort
     private int port;
-    private EventRepository event;
-    private RestTemplate template = new RestTemplate();
+    private final EventRepository event;
+    private final RestTemplate template = new RestTemplate();
 
 
     @Autowired
